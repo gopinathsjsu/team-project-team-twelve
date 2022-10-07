@@ -13,14 +13,22 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Mio_user',
+            name='Mio_auth_user',
             fields=[
-                ('fact_guid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('public_id', models.CharField(max_length=200)),
-                ('username', models.CharField(max_length=50)),
+                ('username', models.CharField(max_length=50, primary_key=True)),
                 ('password', models.CharField(max_length=100)),
                 ('role', models.CharField(max_length=64)),
-                ('is_active', models.BooleanField(default=False)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Mio_user',
+            fields=[
+                ('username', models.CharField(max_length=50, primary_key=True)),
+                ('first_name', models.CharField(max_length=50)),
+                ('last_name', models.CharField(max_length=50)),
+                ('user_type', models.CharField(max_length=50)),
+                ('airline_code', models.CharField(max_length=50)),
+                
             ],
         ),
     ]

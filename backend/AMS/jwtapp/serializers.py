@@ -16,7 +16,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     password2=serializers.CharField(style={'input_type': 'password'},write_only=True)
     class Meta:
         model=User
-        fields=['email','name','password', 'password2','tc']
+        fields=['email','first_name','last_name','roles','password', 'password2','tc']
         extra_kwargs={'password':{'write_only':True}}
 
     # it is used for the validation of the data that we are getting from the frontend:
@@ -43,7 +43,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        fields=['id','email','name']
+        fields=['id','email','first_name','last_name']
         
 class UserChangePasswordSerializer(serializers.Serializer):
     password=serializers.CharField(max_length=255,style={'input_type': 'password'},write_only=True)

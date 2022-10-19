@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AirportConfig(AppConfig):
+class JwtappConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'Airport'
+    name = 'jwtapp'

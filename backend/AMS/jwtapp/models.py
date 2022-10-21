@@ -52,6 +52,9 @@ class Mio_airline(models.Model):
     class Meta:
         unique_together = [['airline_code', 'flight_code']]
 
+    def __str__(self):
+        return self.airline_name+"_"+self.airline_code+"_"+self.flight_code
+
 class User(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -63,7 +66,7 @@ class User(AbstractBaseUser):
 
         ('airport_employee', 'airport_employee'),
         ('airline_employee', 'airline_employee'),
-        ('customer', 'customer'),
+        # ('customer', 'customer'),
         ('admin','admin')
     )
     first_name=models.CharField(max_length=255)
@@ -74,7 +77,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
-    airline_code = models.ForeignKey(Mio_airline,on_delete = models.CASCADE,null=True,blank=True)
+    airline_code = models.ForeignKey(Mio_airline,on_delete = models.CASCADE,null=True,blank=True,related_name="airline")
 
     objects = UserManager()
 

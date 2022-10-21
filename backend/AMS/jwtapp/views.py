@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
+from jwtapp.permissions import adminpermission
 from jwtapp.serializers import UserRegistrationSerializer
 from jwtapp.serializers import UserLoginSerializer
 from jwtapp.renderers import UserRenderer
@@ -28,6 +29,7 @@ def get_tokens_for_user(user):
 
 class UserRegistrationView(APIView):
     renderer_classes=[UserRenderer]
+    permission_classes=[adminpermission]
     def post(self, request,format=None):
         serializer=UserRegistrationSerializer(data=request.data)
         # if serializer.is_valid(raise_exception=True):

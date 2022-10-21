@@ -1,4 +1,6 @@
 from django.contrib import admin
+from jwtapp.models import Mio_airline
+from jwtapp.models import Mio_terminal
 from jwtapp.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
@@ -15,12 +17,12 @@ class UserModelAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserModelAdmin
     # that reference specific fields on auth.User.
-    list_display = ('id','email', 'name','tc','is_admin')
+    list_display = ('id','email', 'first_name','last_name','tc','is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
         #individual fields me ja ke dekhna...waha dikhega
         ('User credentials', {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('name','tc')}),
+        ('Personal info', {'fields': ('first_name','last_name','tc')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserModelAdmin
@@ -28,7 +30,7 @@ class UserModelAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'name','tc','password1', 'password2'),
+            'fields': ('email', 'first_name','last_name','tc','roles','airline_code','flight_code','password1', 'password2'),
         }),
     )
     search_fields = ('email',)
@@ -41,4 +43,13 @@ admin.site.register(User, UserModelAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 
+class Mio_airlineAdmin(admin.ModelAdmin):
+    list_display = ['airline_code','flight_code',]
 
+admin.site.register(Mio_airline,Mio_airlineAdmin)
+
+
+class Mio_terminalAdmin(admin.ModelAdmin):
+    list_display=['terminal','gate','gate_status']
+
+admin.site.register(Mio_terminal,Mio_terminalAdmin)

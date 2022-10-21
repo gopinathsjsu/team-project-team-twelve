@@ -9,7 +9,7 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name,tc,password=None,password2=None):
+    def create_user(self, email, first_name,last_name,roles,tc,password=None,password2=None):
         """
         Creates and saves a User with the given email,tc,name and password.
         """
@@ -18,7 +18,9 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            name=name,
+            first_name=first_name,
+            last_name=last_name,
+            roles=roles,
             tc=tc
         )
 
@@ -26,20 +28,32 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name,tc, password=None):
+    def create_superuser(self, email,first_name,last_name,roles,tc, password=None):
         """
         Creates and saves a superuser with the given email,name,tc,password.
         """
         user = self.create_user(
             email,
             password=password,
-            name=name,
+            first_name=first_name,
+            last_name=last_name,
+            roles=roles,
             tc=tc
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
+class Mio_airline(models.Model):
+    airline_code = models.CharField(max_length = 50)
+    flight_code = models.CharField(max_length = 50)
+    airline_name = models.CharField(max_length = 50)
+    is_available = models.BooleanField(default=False)
+    class Meta:
+        unique_together = [['airline_code', 'flight_code']]
+
+    def __str__(self):
+        return self.airline_name+"_"+self.airline_code+"_"+self.flight_code
 
 class User(AbstractBaseUser):
     email = models.EmailField(
@@ -48,17 +62,27 @@ class User(AbstractBaseUser):
         unique=True,
     )
     # date_of_birth = models.DateField()
-    name=models.CharField(max_length=255)
+    ROLES = (
+
+        ('airport_employee', 'airport_employee'),
+        ('airline_employee', 'airline_employee'),
+        # ('customer', 'customer'),
+        ('admin','admin')
+    )
+    first_name=models.CharField(max_length=255)
+    last_name=models.CharField(max_length=255)
     tc=models.BooleanField()
+    roles = models.CharField(max_length=50, choices=ROLES, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
+    airline_code = models.ForeignKey(Mio_airline,on_delete = models.CASCADE,null=True,blank=True,related_name="airline")
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name','tc']
+    REQUIRED_FIELDS = ['first_name','last_name','roles','tc']
 
     def __str__(self):  
         return self.email
@@ -79,5 +103,28 @@ class User(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
+
+
+
+
+class Mio_terminal(models.Model):
+    terminal = models.CharField(max_length = 50)
+    gate = models.CharField(max_length = 50)
+    gate_status = models.CharField(max_length = 50, default = 'open') #open, occupied, under_maintenance
+    class Meta:
+        unique_together = [['terminal', 'gate']]
+
+class Mio_flight_schedule(models.Model):
+    fact_guid = models.CharField(max_length=64, primary_key=True)
+    flight = models.ForeignKey(Mio_airline, related_name = 'airline_flight',  on_delete = models.CASCADE)
+    airline = models.ForeignKey(Mio_airline,  on_delete = models.CASCADE)
+    source = models.CharField(max_length = 100)
+    destination = models.CharField(max_length = 100)
+    arrival_departure = models.CharField(max_length = 100)
+    time =  models.DateTimeField()
+    terminal_code = models.ForeignKey(Mio_terminal, related_name = 'airport_terminal', null = True, on_delete = models.SET_NULL)
+    gate_code = models.ForeignKey(Mio_terminal, related_name = 'terminal_gate', null = True, on_delete = models.SET_NULL)
+    baggage_carousel = models.CharField(max_length = 100)
+    remarks = models.CharField(max_length = 100)
 
 

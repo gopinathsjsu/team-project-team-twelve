@@ -1,12 +1,12 @@
-
+import "./Styles/app_landing.css"
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
+        <h1>
           Airport Management System
-        </p>
+        </h1>
       </header>
     </div>
   );

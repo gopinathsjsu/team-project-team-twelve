@@ -1,4 +1,5 @@
 from django.contrib import admin
+from jwtapp.models import Mio_flight_schedule
 from jwtapp.models import Mio_airline
 from jwtapp.models import Mio_terminal
 from jwtapp.models import User
@@ -44,7 +45,7 @@ admin.site.register(User, UserModelAdmin)
 # unregister the Group model from admin.
 
 class Mio_airlineAdmin(admin.ModelAdmin):
-    list_display = ['airline_code','flight_code',]
+    list_display = ['airline_flight_key','airline_code','flight_code',]
 
 admin.site.register(Mio_airline,Mio_airlineAdmin)
 
@@ -53,3 +54,8 @@ class Mio_terminalAdmin(admin.ModelAdmin):
     list_display=['terminal','gate','gate_status']
 
 admin.site.register(Mio_terminal,Mio_terminalAdmin)
+
+class Mio_flight_schedule_Admin(admin.ModelAdmin):
+    list_display=[field.name for field in Mio_flight_schedule._meta.get_fields()]
+
+admin.site.register(Mio_flight_schedule,Mio_flight_schedule_Admin)

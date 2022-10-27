@@ -18,12 +18,12 @@ class UserModelAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserModelAdmin
     # that reference specific fields on auth.User.
-    list_display = ('id','email', 'first_name','last_name','tc','is_admin')
+    list_display = ('id','email', 'first_name','last_name','terms_conditions','is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
         #individual fields me ja ke dekhna...waha dikhega
         ('User credentials', {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name','last_name','tc')}),
+        ('Personal info', {'fields': ('first_name','last_name','terms_conditions')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserModelAdmin
@@ -31,7 +31,7 @@ class UserModelAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'first_name','last_name','tc','roles','airline_code','flight_code','password1', 'password2'),
+            'fields': ('email', 'first_name','last_name','terms_conditions','roles','airline_code','flight_code','password1', 'password2'),
         }),
     )
     search_fields = ('email',)
@@ -51,7 +51,7 @@ admin.site.register(Mio_airline,Mio_airlineAdmin)
 
 
 class Mio_terminalAdmin(admin.ModelAdmin):
-    list_display=['terminal','gate','gate_status']
+    list_display=['terminal_gate']
 
 admin.site.register(Mio_terminal,Mio_terminalAdmin)
 

@@ -79,7 +79,7 @@ class User(AbstractBaseUser):
     first_name=models.CharField(max_length=255)
     last_name=models.CharField(max_length=255)
     terms_conditions=models.BooleanField()
-    role = models.CharField(max_length=50, choices=ROLES, null=True)
+    roles = models.CharField(max_length=50, choices=ROLES, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -109,6 +109,12 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+    
+    def save(self, *args, **kwargs):
+        print(self.airline_code)
+        import pdb; pdb.set_trace()
+        super(Mio_airline,self).save(*args, **kwargs)
 
 
 

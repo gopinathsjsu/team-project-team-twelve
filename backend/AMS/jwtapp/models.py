@@ -110,11 +110,6 @@ class User(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
-    
-    def save(self, *args, **kwargs):
-        print(self.airline_code)
-        import pdb; pdb.set_trace()
-        super(Mio_airline,self).save(*args, **kwargs)
 
 
 

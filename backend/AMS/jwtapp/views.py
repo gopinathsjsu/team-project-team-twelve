@@ -165,3 +165,22 @@ class GetFlightSchedule(ListAPIView):
     queryset=Mio_flight_schedule.objects.all()
     serializer_class=MioFlightScheduleSerializer
 
+class ChangeGateStatus(APIView):
+    def patch(self, request, *args, **kwargs):
+        try:
+            print(request.data)
+            data = request.data
+            terminal_gate = data.get('terminal_gate')
+            rec = Mio_terminal.objects.get(terminal_gate = terminal_gate)
+
+            serializer = MioTerminalSerializer(rec, data = data, partial = True)
+            
+            #import pdb; pdb.set_trace()
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"msg":f"{terminal_gate} status change successful","status":status.HTTP_200_OK} )
+            else:
+                return Response({"msg":serializer.errors,"status":status.HTTP_404_BAD_REQUEST} )
+        except Exception:
+            return Response({'message': 'invalid input ','status': status.HTTP_404_BAD_REQUEST})

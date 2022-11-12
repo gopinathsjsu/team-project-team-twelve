@@ -41,7 +41,8 @@ class UserRegistrationView(APIView):
             user=serializer.save()
             # generate token when user get saved:
             token=get_tokens_for_user(user)
-            return Response({"token":token,"msg":"Registration successful","status":status.HTTP_201_CREATED})
+            # return Response({"token":token,"msg":"Registration successful","status":status.HTTP_201_CREATED})
+            return Response({"msg":"Registration successful","status":status.HTTP_201_CREATED})
         # print(serializer.errors) it will work only if we remove raise exception in line 14
         return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
 
@@ -99,12 +100,12 @@ class UserPasswordResetView(APIView):
 
 
 
-class UserListView(APIView):
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAuthenticated, adminpermission,)
+# class UserListView(APIView):
+#     # authentication_classes = (TokenAuthentication,)
+#     # permission_classes = (IsAuthenticated, adminpermission,)
     
-    queryset = User.objects.all()
-    serializer_class = UserProfileSerializer
+#     queryset = User.objects.all()
+#     serializer_class = UserProfileSerializer
     # pagination_class = MyPageNumberPagination
     # filter_backends = [DjangoFilterBackend,
                     #    filters.SearchFilter, filters.OrderingFilter]
@@ -151,8 +152,6 @@ class GetUserInfo(APIView):
             return Response({'message': 'invalid input ','status': 400})
 
 
-
-
 class GetAllAirlineInfo(ListAPIView):
     queryset=Mio_airline.objects.all()
     serializer_class=MioAirlineSerializer
@@ -165,3 +164,20 @@ class GetFlightSchedule(ListAPIView):
     queryset=Mio_flight_schedule.objects.all()
     serializer_class=MioFlightScheduleSerializer
 
+
+class ChangeGateStatus(APIView):
+    
+    def patch(self, request, format=None):
+        try:
+            data=request.data
+            terminal_gate=data.get('terminal_gate')
+            rec = Mio_terminal.objects.get(terminal_gate=terminal_gate)
+            serializer = MioTerminalSerializer(
+                rec, data=data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'message': f'{terminal_gate} gate status is updated successfully',
+                                 'status': 200})
+            return Response({"message": serializer.errors, "status": status.HTTP_400_BAD_REQUEST})
+        except:
+            return Response({'message': 'invalid input', 'status': 400})

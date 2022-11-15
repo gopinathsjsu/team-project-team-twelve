@@ -40,7 +40,7 @@ def get_tokens_for_user(user):
 def get_fact_guid(source,destination,terminal_gate_key):
     unique_sep="|"
     unique_ID = uuid.uuid5(uuid.NAMESPACE_X500,source + unique_sep + destination+unique_sep+terminal_gate_key)
-    return unique_ID
+    return str(unique_ID)
 
 class UserRegistrationView(APIView):
     # renderer_classes=[UserRenderer]
@@ -149,40 +149,12 @@ class GetFlightSchedule(ListAPIView):
     serializer_class=MioFlightScheduleSerializer
 
 
-
-class ChangeGateStatus(APIView):
-    def patch(self, request, *args, **kwargs):
-        try:
-            print(request.data)
-            data = request.data
-            terminal_gate = data.get('terminal_gate')
-            rec = Mio_terminal.objects.get(terminal_gate = terminal_gate)
-
-            serializer = MioTerminalSerializer(rec, data = data, partial = True)
-            
-            #import pdb; pdb.set_trace()
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"msg":f"{terminal_gate} status change successful","status":status.HTTP_200_OK} )
-            else:
-                return Response({"msg":serializer.errors,"status":status.HTTP_404_BAD_REQUEST} )
-        except Exception:
-            return Response({'message': 'invalid input ','status': status.HTTP_404_BAD_REQUEST})
-
-
-class Airline_CRUD(GenericAPIView):
-    
-    queryset=Mio_airline.objects.all()
+class Airline_create(APIView):
     serializer_class=MioAirlineSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
     
     def post(self, request,*args, **kwargs):
         try:
-
-            airline_flight_key=request.data.get("airline_code") + "_" + request.data.get("flight_code")
+            airline_flight_key=request.data.get("airline_name")+request.data.get("airline_code") + "_" + request.data.get("flight_code")
             data=request.data
             data["airline_flight_key"]=airline_flight_key
             serializer=self.serializer_class(data=data)
@@ -194,10 +166,17 @@ class Airline_CRUD(GenericAPIView):
             else:
                 "to get this field is required error."
                 return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
-        except Exception as e:
-            return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+        except Exception:
+            return Response({'message': 'invalid input ','status': 400})
 
 
+class Airline_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,CreateModelMixin,GenericAPIView):
+    queryset=Mio_airline.objects.all()
+    serializer_class=MioAirlineSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
@@ -208,7 +187,7 @@ class Airline_CRUD(GenericAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-class Airline_list(ListAPIView):
+class AirlineInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated, adminpermission,)
     # queryset = Mio_terminal.objects.all()
@@ -229,16 +208,9 @@ class Airline_list(ListAPIView):
 
 
 
-
-
-class Terminal_CRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,CreateModelMixin,GenericAPIView):
-
-    queryset=Mio_terminal.objects.all()
+class Terminal_create(APIView):
     serializer_class=MioTerminalSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-    
     def post(self, request,*args, **kwargs):
         try:
             serializer=self.serializer_class(data=request.data)
@@ -254,6 +226,15 @@ class Terminal_CRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Create
             return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
 
 
+
+class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,GenericAPIView):
+
+    queryset=Mio_terminal.objects.all()
+    serializer_class=MioTerminalSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
@@ -283,30 +264,40 @@ class AllTerminalGatesInfo(ListAPIView):
         queryset_list=Mio_terminal.objects.all()
         return queryset_list
 
-class FlightScehduleCRUD(GenericAPIView):
+
+class FlightSchedule_create(APIView):
+    serializer_class=MioFlightScheduleSerializer
+
+    def post(self, request,*args, **kwargs):
+    
+        data=request.data
+        source=data.get('source')
+        destination=data.get('destination')
+        terminal_gate_key=data.get('terminal_gate_key')
+        fact_guid=get_fact_guid(source,destination,terminal_gate_key)
+        data["fact_guid"]=fact_guid
+        serializer=self.serializer_class(data=data)
+            # NOTE
+        # "dont worry about the payload validations,it will automatically takes only those fields which we mentioned in serializer....other than that it will ignore gracefully "
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"msg":"Terminal data added successful","status":status.HTTP_200_OK})
+        else:
+            "to get this field is required error."
+            return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+    # except Exception as e:
+    #         return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+
+
+
+
+
+class FlightScehduleRUD(GenericAPIView):
     queryset=Mio_flight_schedule.objects.all()
     serializer_class=MioFlightScheduleSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-    
-    def post(self, request,*args, **kwargs):
-        try:
-            data=request.data
-            fact_guid=get_fact_guid()
-            data["fact_guid"]=fact_guid
-            serializer=self.serializer_class(data=data)
-            # NOTE
-            # "dont worry about the payload validations,it will automatically takes only those fields which we mentioned in serializer....other than that it will ignore gracefully "
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"msg":"flight schedule added successful","status":status.HTTP_200_OK})
-            else:
-                "to get this field is required error."
-                return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
-        except Exception as e:
-            return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
-
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

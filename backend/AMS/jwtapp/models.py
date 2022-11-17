@@ -55,8 +55,12 @@ class Mio_airline(models.Model):
     class Meta:
         unique_together = [['airline_code', 'flight_code']]
 
+    # def save(self, *args, **kwargs):
+    #     self.airline_flight_key = self.airline_code + "_" + self.flight_code
+    #     super(Mio_airline,self).save(*args, **kwargs)
+
     def __str__(self):
-        return self.airline_code+"_"+self.flight_code
+        return self.airline_name+"_"+self.airline_code+"_"+self.flight_code
 
 class User(AbstractBaseUser):
     email = models.EmailField(

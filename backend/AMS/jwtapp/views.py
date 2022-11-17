@@ -28,8 +28,6 @@ from rest_framework.mixins import CreateModelMixin,DestroyModelMixin,UpdateModel
 
 from django.core.exceptions import ValidationError
 import uuid
-import datetime
-
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -39,9 +37,9 @@ def get_tokens_for_user(user):
     }
 
 
-def get_fact_guid(source,destination,time):
+def get_fact_guid(source,destination,terminal_gate_key):
     unique_sep="|"
-    unique_ID = uuid.uuid5(uuid.NAMESPACE_X500,source + unique_sep + destination+unique_sep+time)
+    unique_ID = uuid.uuid5(uuid.NAMESPACE_X500,source + unique_sep + destination+unique_sep+terminal_gate_key)
     return str(unique_ID)
 
 class UserRegistrationView(APIView):
@@ -275,11 +273,11 @@ class FlightSchedule_create(APIView):
         data=request.data
         source=data.get('source')
         destination=data.get('destination')
-        time=data.get('time')
-        fact_guid=get_fact_guid(source,destination,time)
+        terminal_gate_key=data.get('terminal_gate_key')
+        fact_guid=get_fact_guid(source,destination,terminal_gate_key)
         data["fact_guid"]=fact_guid
         serializer=self.serializer_class(data=data)
-            # NOTEterminal_gate_key
+            # NOTE
         # "dont worry about the payload validations,it will automatically takes only those fields which we mentioned in serializer....other than that it will ignore gracefully "
         if serializer.is_valid():
             serializer.save()

@@ -28,6 +28,8 @@ from rest_framework.mixins import CreateModelMixin,DestroyModelMixin,UpdateModel
 
 from django.core.exceptions import ValidationError
 import uuid
+import datetime
+
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -37,9 +39,9 @@ def get_tokens_for_user(user):
     }
 
 
-def get_fact_guid(source,destination,terminal_gate_key):
+def get_fact_guid(source,destination,time):
     unique_sep="|"
-    unique_ID = uuid.uuid5(uuid.NAMESPACE_X500,source + unique_sep + destination+unique_sep+terminal_gate_key)
+    unique_ID = uuid.uuid5(uuid.NAMESPACE_X500,source + unique_sep + destination+unique_sep+time)
     return str(unique_ID)
 
 class UserRegistrationView(APIView):
@@ -170,21 +172,6 @@ class Airline_create(APIView):
             return Response({'message': 'invalid input ','status': 400})
 
 
-class Airline_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,CreateModelMixin,GenericAPIView):
-    queryset=Mio_airline.objects.all()
-    serializer_class=MioAirlineSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-    
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
 
 
 class AirlineInfo(ListAPIView):
@@ -227,23 +214,6 @@ class Terminal_create(APIView):
 
 
 
-class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,GenericAPIView):
-
-    queryset=Mio_terminal.objects.all()
-    serializer_class=MioTerminalSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-    
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
 
 class AllTerminalGatesInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -273,11 +243,11 @@ class FlightSchedule_create(APIView):
         data=request.data
         source=data.get('source')
         destination=data.get('destination')
-        terminal_gate_key=data.get('terminal_gate_key')
-        fact_guid=get_fact_guid(source,destination,terminal_gate_key)
+        time=data.get('time')
+        fact_guid=get_fact_guid(source,destination,time)
         data["fact_guid"]=fact_guid
         serializer=self.serializer_class(data=data)
-            # NOTE
+            # NOTEterminal_gate_key
         # "dont worry about the payload validations,it will automatically takes only those fields which we mentioned in serializer....other than that it will ignore gracefully "
         if serializer.is_valid():
             serializer.save()
@@ -291,22 +261,6 @@ class FlightSchedule_create(APIView):
 
 
 
-
-class FlightScehduleRUD(GenericAPIView):
-    queryset=Mio_flight_schedule.objects.all()
-    serializer_class=MioFlightScheduleSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
 
 
 

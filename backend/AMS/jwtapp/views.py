@@ -1,5 +1,3 @@
-from multiprocessing import context
-from django.shortcuts import render
 from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User
 from rest_framework.response import Response
 from rest_framework import status

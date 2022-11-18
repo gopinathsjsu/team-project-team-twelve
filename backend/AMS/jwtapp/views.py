@@ -1,3 +1,5 @@
+from multiprocessing import context
+from django.shortcuts import render
 from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User
 from rest_framework.response import Response
 from rest_framework import status
@@ -169,6 +171,7 @@ class Airline_create(APIView):
         except Exception:
             return Response({'message': 'invalid input ','status': 400})
 
+
 class Airline_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,CreateModelMixin,GenericAPIView):
     queryset=Mio_airline.objects.all()
     serializer_class=MioAirlineSerializer
@@ -184,7 +187,6 @@ class Airline_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,CreateMo
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
 
 
 class AirlineInfo(ListAPIView):
@@ -224,6 +226,8 @@ class Terminal_create(APIView):
                 return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
         except Exception as e:
             return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+
+
 
 class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,GenericAPIView):
 
@@ -286,6 +290,10 @@ class FlightSchedule_create(APIView):
     # except Exception as e:
     #         return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
 
+
+
+
+
 class FlightScehduleRUD(GenericAPIView):
     queryset=Mio_flight_schedule.objects.all()
     serializer_class=MioFlightScheduleSerializer
@@ -301,6 +309,7 @@ class FlightScehduleRUD(GenericAPIView):
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
 
 
 class FlightScehduleInfo(ListAPIView):

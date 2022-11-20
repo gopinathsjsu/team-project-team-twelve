@@ -155,6 +155,18 @@ class MioAirlineSerializer(serializers.ModelSerializer):
         }
         return response
 
+class MioAirlineMainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Mio_airline_main
+        fields=['airline_key']
+    
+    def to_representation(self, instance):
+        data = super(MioAirlineMainSerializer,
+                     self).to_representation(instance)
+        response = {
+            "airline_key": data['airline_key']
+        }
+        return response
 
 class MioTerminalSerializer(serializers.ModelSerializer):
     class Meta:

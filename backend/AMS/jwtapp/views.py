@@ -211,6 +211,51 @@ class AirlineInfo(ListAPIView):
         return queryset_list
 
 
+class AirlineMain_create(APIView):
+    serializer_class=MioAirlineMainSerializer
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            serializer = self.serializer_class(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"msg":"Airline Main data added successful","status":status.HTTP_200_OK})
+            else:
+                "to get this field is required error."
+                return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+        except Exception:
+            return Response({'message': 'invalid input ','status': 400})
+    
+class AirlineMain_RUD(RetrieveModelMixin,DestroyModelMixin,GenericAPIView):
+    queryset=Mio_airline_main.objects.all()
+    serializer_class=MioAirlineMainSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+class AirlineMainInfo(ListAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated, adminpermission,)
+    # queryset = Mio_terminal.objects.all()
+    serializer_class = MioAirlineMainSerializer
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['airline_key']
+    search_fields = ['airline_key']
+    # ordering_fields = ['id']
+    # pagination_class = MyPageNumberPagination
+
+    def get_queryset(self, *args, **kwargs):
+        """
+        TODO:
+        We can do customization in the queryset we want 
+        """
+        queryset_list=Mio_airline_main.objects.all()
+        return queryset_list
 
 class Terminal_create(APIView):
     serializer_class=MioTerminalSerializer

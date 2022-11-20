@@ -19,7 +19,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     password2=serializers.CharField(style={'input_type': 'password'},write_only=True)
     class Meta:
         model=User
-        fields=['email','first_name','last_name','roles','password', 'password2','terms_conditions']
+        fields=['email','first_name','last_name','roles','password', 'password2','terms_conditions','airline_code']
         extra_kwargs={'password':{'write_only':True}}
 
     # it is used for the validation of the data that we are getting from the frontend:

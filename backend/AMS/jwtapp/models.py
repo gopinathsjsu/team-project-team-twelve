@@ -10,7 +10,7 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name,last_name,roles,terms_conditions,password=None,password2=None):
+    def create_user(self, email, first_name,last_name,roles,terms_conditions,airline_code,password=None,password2=None):
         """
         Creates and saves a User with the given email,tc,name and password.
         """
@@ -22,7 +22,8 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             roles=roles,
-            terms_conditions=terms_conditions
+            terms_conditions=terms_conditions,
+            airline_code=airline_code
         )
 
         user.set_password(password)

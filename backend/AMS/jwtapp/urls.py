@@ -26,6 +26,9 @@ urlpatterns = [
     path('airline-rud/<str:pk>',Airline_RUD.as_view(),name="airline-rud"),
     path('airline-list/',AirlineInfo.as_view(),name="airline-list"),
 
+    path('airline-main-create/',AirlineMain_create.as_view(),name="airline-main-create"),
+    path('airline-main-rud/<str:pk>',AirlineMain_RUD.as_view(),name="airline-main-rud"),
+    path('airline-main-list/',AirlineMainInfo.as_view(),name="airline-main-list")
 ]
 
 

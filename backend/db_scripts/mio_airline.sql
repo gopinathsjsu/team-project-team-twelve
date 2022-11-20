@@ -1,5 +1,10 @@
 
---delete from jwtapp_mio_airline
+
+INSERT INTO public.jwtapp_mio_airline_main (airline_key) VALUES('AAL');
+INSERT INTO public.jwtapp_mio_airline_main (airline_key) VALUES('SWA');
+INSERT INTO public.jwtapp_mio_airline_main (airline_key) VALUES('SIA');
+INSERT INTO public.jwtapp_mio_airline_main (airline_key) VALUES('DAL');
+INSERT INTO public.jwtapp_mio_airline_main (airline_key) VALUES('BAW');
 
 
 INSERT INTO public.jwtapp_mio_airline (airline_flight_key, airline_code, flight_code, airline_name, is_available)

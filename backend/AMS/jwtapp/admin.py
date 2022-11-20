@@ -1,6 +1,7 @@
 from django.contrib import admin
 from jwtapp.models import Mio_flight_schedule
 from jwtapp.models import Mio_airline
+from jwtapp.models import Mio_airline_main
 from jwtapp.models import Mio_terminal
 from jwtapp.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -49,6 +50,9 @@ class Mio_airlineAdmin(admin.ModelAdmin):
 
 admin.site.register(Mio_airline,Mio_airlineAdmin)
 
+class Mio_airlineMainAdmin(admin.ModelAdmin):
+    list_display = ['airline_key']
+admin.site.register(Mio_airline_main, Mio_airlineMainAdmin)
 
 class Mio_terminalAdmin(admin.ModelAdmin):
     list_display=['terminal_gate']

@@ -40,15 +40,22 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             roles=roles,
-            terms_conditions=terms_conditions
+            terms_conditions=terms_conditions,
+            airline_code=None
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
+class Mio_airline_main(models.Model):
+    airline_key = models.CharField(max_length=100,primary_key=True)
+    def __str__(self):
+        return self.airline_key
+
+
 class Mio_airline(models.Model):
     airline_flight_key=models.CharField(max_length=100,primary_key=True,blank=True)
-    airline_code = models.CharField(max_length = 50)
+    airline_code = models.ForeignKey(Mio_airline_main, on_delete= models.CASCADE)
     flight_code = models.CharField(max_length = 50)
     airline_name = models.CharField(max_length = 50)
     is_available = models.BooleanField(default=False)
@@ -57,7 +64,7 @@ class Mio_airline(models.Model):
         unique_together = [['airline_code', 'flight_code']]
 
     def __str__(self):
-        return self.airline_code+"_"+self.flight_code
+        return self.airline_flight_key
 
 class User(AbstractBaseUser):
     email = models.EmailField(
@@ -81,7 +88,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
-    airline_code = models.ForeignKey(Mio_airline, on_delete = models.CASCADE,null=True,blank=True,related_name="airline")
+    airline_code = models.ForeignKey(Mio_airline_main, on_delete = models.CASCADE,null=True,blank=True,related_name="airline")
 
     objects = UserManager()
 

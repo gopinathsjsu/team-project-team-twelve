@@ -1,7 +1,7 @@
 from email import utils
 from xml.dom import ValidationErr
 from rest_framework import serializers
-from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User
+from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_airline_main
 from jwtapp.utils import Util
 
 # email reset
@@ -154,6 +154,7 @@ class MioAirlineSerializer(serializers.ModelSerializer):
             "is_available": data['is_available']
         }
         return response
+
 
 class MioTerminalSerializer(serializers.ModelSerializer):
     class Meta:

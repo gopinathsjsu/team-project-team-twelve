@@ -1,12 +1,12 @@
 from multiprocessing import context
 from django.shortcuts import render
-from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User
+from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_airline_main
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from jwtapp.permissions import adminpermission
-from jwtapp.serializers import MioAirlineSerializer, MioFlightScheduleSerializer, MioTerminalSerializer, UserRegistrationSerializer
+from jwtapp.serializers import MioAirlineSerializer, MioFlightScheduleSerializer, MioTerminalSerializer, UserRegistrationSerializer, MioAirlineMainSerializer
 from jwtapp.serializers import UserLoginSerializer
 from jwtapp.renderers import UserRenderer
 from rest_framework.generics import ListAPIView
@@ -151,12 +151,14 @@ class GetFlightSchedule(ListAPIView):
     serializer_class=MioFlightScheduleSerializer
 
 
+
+
 class Airline_create(APIView):
     serializer_class=MioAirlineSerializer
     
     def post(self, request,*args, **kwargs):
         try:
-            airline_flight_key=request.data.get("airline_name")+request.data.get("airline_code") + "_" + request.data.get("flight_code")
+            airline_flight_key=request.data.get("airline_code") + "_" + request.data.get("flight_code")
             data=request.data
             data["airline_flight_key"]=airline_flight_key
             serializer=self.serializer_class(data=data)

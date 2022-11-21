@@ -2,6 +2,10 @@
 	text-align: left;
 	color: rgb(162, 183, 3); 
 }
+.A-D-Panel {
+    display: flex;
+	flex-direction: row;
+}
 .App-header {
 	background-color: #282A3A; 
 	min-height: 50vh;

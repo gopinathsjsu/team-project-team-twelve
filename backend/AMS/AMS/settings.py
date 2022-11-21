@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-p8pz2*(4@*vo*k7hy4q07ykao3lwa)j$)dx1d5z16o)&)m2o&0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'jwtapp',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_filters'
+
 ]
 
 MIDDLEWARE = [

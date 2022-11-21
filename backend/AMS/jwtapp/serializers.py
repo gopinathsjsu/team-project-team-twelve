@@ -1,7 +1,7 @@
 from email import utils
 from xml.dom import ValidationErr
 from rest_framework import serializers
-from jwtapp.models import User
+from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_airline_main
 from jwtapp.utils import Util
 
 # email reset
@@ -11,12 +11,15 @@ from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 "-------------"
 
+from django.core.exceptions import ValidationError
+
+
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password2=serializers.CharField(style={'input_type': 'password'},write_only=True)
     class Meta:
         model=User
-        fields=['email','name','password', 'password2','tc']
+        fields=['email','first_name','last_name','roles','password', 'password2','terms_conditions','airline_code']
         extra_kwargs={'password':{'write_only':True}}
 
     # it is used for the validation of the data that we are getting from the frontend:
@@ -43,7 +46,21 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        fields=['id','email','name']
+        fields=['id','email','first_name','last_name','roles','airline_code']
+    
+    def to_representation(self, instance):
+        data = super(UserProfileSerializer,
+                     self).to_representation(instance)
+        response = {
+            "id": data['id'],
+            "first_name": data['first_name'],
+            "last_name": data['last_name'],
+            "email": data['email'],
+            "roles": data['roles'],
+            "airline_code": data['airline_code'],
+        }
+
+        return response
         
 class UserChangePasswordSerializer(serializers.Serializer):
     password=serializers.CharField(max_length=255,style={'input_type': 'password'},write_only=True)
@@ -120,3 +137,50 @@ class UserPasswordResetSerializer(serializers.Serializer):
             PasswordResetTokenGenerator().check_token(user,token)
             raise serializers.ValidationError("Token is not valid or Expired")
         
+
+class MioAirlineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Mio_airline
+        fields=['airline_flight_key','airline_code','flight_code','airline_name','is_available']
+    
+    def to_representation(self, instance):
+        data = super(MioAirlineSerializer,
+                     self).to_representation(instance)
+        response = {
+            "airline_flight_key": data['airline_flight_key'],
+            "airline_code": data['airline_code'],
+            "airline_name": data['airline_name'],
+            "flight_code": data['flight_code'],
+            "is_available": data['is_available']
+        }
+        return response
+
+class MioAirlineMainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Mio_airline_main
+        fields=['airline_key']
+    
+    def to_representation(self, instance):
+        data = super(MioAirlineMainSerializer,
+                     self).to_representation(instance)
+        response = {
+            "airline_key": data['airline_key']
+        }
+        return response
+
+class MioTerminalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Mio_terminal
+        fields=['terminal_gate','gate_status']
+
+    def to_representation(self, instance):
+        return super().to_representation(instance)
+
+
+class MioFlightScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Mio_flight_schedule
+        fields=['fact_guid','airline_flight_key','source','destination','arrival_departure','time','terminal_gate_key','baggage_carousel','remarks']
+    
+    def to_representation(self, instance):
+        return super().to_representation(instance)

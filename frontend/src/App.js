@@ -1,24 +1,12 @@
-import React from 'react';
-import Arrival from './Arrival';
-// import Departure from './Departure';
-import './App.css';
+import * as React from 'react';
+import Button from '@mui/material/Button';
 
 
 function App() {
   return (  
-    <div className = "A-D-Panel">
-    <Arrival />
-    {/* <Departure /> */}
-    {// <div className="App">
-    //   <header className="App-header">
-    //     <p>
-    //       Airport Management System
-    //     </p>
-    //     <button>SignIn</button>
-    //   </header>
-    // </div>
-  }
-    </div> 
+    <div>
+      <Button variant="contained" color="success">Hello World!</Button>
+    </div>
   );
 }
 

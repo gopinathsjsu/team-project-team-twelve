@@ -1,5 +1,6 @@
 from email.policy import default
 from django.db import models
+import datetime
 
 # Create your models here.
 
@@ -88,7 +89,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
-    airline_code = models.ForeignKey(Mio_airline_main, on_delete = models.CASCADE,null=True,blank=True,related_name="airline")
+    airline_code = models.ForeignKey(Mio_airline_main, on_delete = models.CASCADE,null=True,blank=True,related_name="airline")  
 
     objects = UserManager()
 
@@ -124,7 +125,6 @@ class Mio_terminal(models.Model):
     def __str__(self):
         return self.terminal_gate
     
-import datetime
 class Mio_flight_schedule(models.Model):
     fact_guid = models.CharField(max_length=64, primary_key=True)
     airline_flight_key = models.ForeignKey(Mio_airline, related_name = 'airline_flight',  on_delete = models.CASCADE)    
@@ -138,4 +138,8 @@ class Mio_flight_schedule(models.Model):
     remarks = models.CharField(max_length = 100)
 
 
-
+class Mio_passenger(models.Model):
+    flight_key=models.ForeignKey("Mio_flight_schedule",on_delete=models.CASCADE)
+    date=models.DateField(default=datetime.datetime.now().date())
+    airline_flight_key=models.CharField(max_length= 100)
+    passenger_id=models.CharField(max_length=50)

@@ -124,14 +124,15 @@ class Mio_terminal(models.Model):
     def __str__(self):
         return self.terminal_gate
     
-
+import datetime
 class Mio_flight_schedule(models.Model):
     fact_guid = models.CharField(max_length=64, primary_key=True)
     airline_flight_key = models.ForeignKey(Mio_airline, related_name = 'airline_flight',  on_delete = models.CASCADE)    
     source = models.CharField(max_length = 100)
     destination = models.CharField(max_length = 100)
     arrival_departure = models.CharField(max_length=12)
-    time =  models.DateTimeField()
+    date=models.DateField(default=datetime.datetime.now().date())
+    time =  models.TimeField(default=datetime.datetime.now().time())
     terminal_gate_key = models.ForeignKey(Mio_terminal, related_name = 'airport_terminal_gate', null = True, blank = True, on_delete =  models.CASCADE)
     baggage_carousel = models.CharField(max_length = 100)
     remarks = models.CharField(max_length = 100)

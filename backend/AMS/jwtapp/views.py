@@ -1,12 +1,12 @@
 from multiprocessing import context
 from django.shortcuts import render
-from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_airline_main
+from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from jwtapp.permissions import adminpermission
-from jwtapp.serializers import MioAirlineSerializer, MioFlightScheduleSerializer, MioTerminalSerializer, UserRegistrationSerializer, MioAirlineMainSerializer
+from jwtapp.serializers import MioAirlineSerializer, MioFlightScheduleSerializer, MioTerminalSerializer, UserRegistrationSerializer
 from jwtapp.serializers import UserLoginSerializer
 from jwtapp.renderers import UserRenderer
 from rest_framework.generics import ListAPIView
@@ -39,10 +39,6 @@ def get_tokens_for_user(user):
     }
 
 
-def get_fact_guid(source,destination,time):
-    unique_sep="|"
-    unique_ID = uuid.uuid5(uuid.NAMESPACE_X500,source + unique_sep + destination+unique_sep+time)
-    return str(unique_ID)
 
 class UserRegistrationView(APIView):
     # renderer_classes=[UserRenderer]
@@ -56,7 +52,7 @@ class UserRegistrationView(APIView):
             token=get_tokens_for_user(user)
             # return Response({"token":token,"msg":"Registration successful","status":status.HTTP_201_CREATED})
             return Response({"msg":"Registration successful","status":status.HTTP_201_CREATED})
-        # print(serializer.errors) it will work only if we remove raise exception in line 14
+        # print(serializer.errors) it will work only if wedccx remove raise exception in line 14
         return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
 
 
@@ -151,14 +147,12 @@ class GetFlightSchedule(ListAPIView):
     serializer_class=MioFlightScheduleSerializer
 
 
-
-
 class Airline_create(APIView):
     serializer_class=MioAirlineSerializer
     
     def post(self, request,*args, **kwargs):
         try:
-            airline_flight_key=request.data.get("airline_code") + "_" + request.data.get("flight_code")
+            airline_flight_key=request.data.get("airline_name")+request.data.get("airline_code") + "_" + request.data.get("flight_code")
             data=request.data
             data["airline_flight_key"]=airline_flight_key
             serializer=self.serializer_class(data=data)
@@ -211,51 +205,6 @@ class AirlineInfo(ListAPIView):
         return queryset_list
 
 
-class AirlineMain_create(APIView):
-    serializer_class=MioAirlineMainSerializer
-    
-    def post(self, request, *args, **kwargs):
-        try:
-            data = request.data
-            serializer = self.serializer_class(data=data)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"msg":"Airline Main data added successful","status":status.HTTP_200_OK})
-            else:
-                "to get this field is required error."
-                return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
-        except Exception:
-            return Response({'message': 'invalid input ','status': 400})
-    
-class AirlineMain_RUD(RetrieveModelMixin,DestroyModelMixin,GenericAPIView):
-    queryset=Mio_airline_main.objects.all()
-    serializer_class=MioAirlineMainSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-class AirlineMainInfo(ListAPIView):
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAuthenticated, adminpermission,)
-    # queryset = Mio_terminal.objects.all()
-    serializer_class = MioAirlineMainSerializer
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['airline_key']
-    search_fields = ['airline_key']
-    # ordering_fields = ['id']
-    # pagination_class = MyPageNumberPagination
-
-    def get_queryset(self, *args, **kwargs):
-        """
-        TODO:
-        We can do customization in the queryset we want 
-        """
-        queryset_list=Mio_airline_main.objects.all()
-        return queryset_list
 
 class Terminal_create(APIView):
     serializer_class=MioTerminalSerializer
@@ -280,7 +229,7 @@ class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Generic
 
     queryset=Mio_terminal.objects.all()
     serializer_class=MioTerminalSerializer
-
+    
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
     
@@ -320,10 +269,12 @@ class FlightSchedule_create(APIView):
     def post(self, request,*args, **kwargs):
     
         data=request.data
-        source=data.get('source')
-        destination=data.get('destination')
-        time=data.get('time')
-        fact_guid=get_fact_guid(source,destination,time)
+        dtm=datetime.datetime.strptime(data.get("time"),'%Y-%m-%d %H:%M:%S.%f')
+        data["date"]=dtm.date()
+        data["time"]=dtm.time()
+        date_dtm=dtm.date().strftime("%Y_%m_%d")
+        airline_flight_key=data.get('airline_flight_key')
+        fact_guid=f"{airline_flight_key}_{date_dtm}"
         data["fact_guid"]=fact_guid
         serializer=self.serializer_class(data=data)
             # NOTEterminal_gate_key
@@ -341,7 +292,7 @@ class FlightSchedule_create(APIView):
 
 
 
-class FlightScehduleRUD(GenericAPIView):
+class FlightScehduleRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,GenericAPIView):
     queryset=Mio_flight_schedule.objects.all()
     serializer_class=MioFlightScheduleSerializer
 

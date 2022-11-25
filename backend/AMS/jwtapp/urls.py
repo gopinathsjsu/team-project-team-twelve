@@ -1,10 +1,9 @@
 from django.urls import path,include
 
-from jwtapp.views import GetAllAirlineInfo, GetFlightSchedule, GetTerminalGateInfo, GetUserInfo, UserRegistrationView,UserLoginView,UserProfileView,UserChangePasswordView,SendPasswordResetView,UserPasswordResetView,Terminal_RUD,AllTerminalGatesInfo,FlightScehduleRUD,FlightScehduleInfo,Airline_create,AirlineInfo,Airline_RUD,Terminal_create,FlightSchedule_create, AirlineMain_create, AirlineMain_RUD, AirlineMainInfo
+from jwtapp.views import GetAllAirlineInfo, GetFlightSchedule, GetTerminalGateInfo, GetUserInfo, UserRegistrationView,UserLoginView,UserProfileView,UserChangePasswordView,SendPasswordResetView,UserPasswordResetView,Terminal_RUD,AllTerminalGatesInfo,FlightScehduleRUD,FlightScehduleInfo,Airline_create,AirlineInfo,Airline_RUD,Terminal_create,FlightSchedule_create, Airline_create, Airline_RUD, AirlineInfo, Passenger_create, PassengerRUD, PassengerInfo
 urlpatterns = [
     path('register/',UserRegistrationView.as_view(),name="register"),
     path('login/',UserLoginView.as_view(),name="login"),
-    path('userprofile/',UserProfileView.as_view(),name="profile"),
     path('changepassword/',UserChangePasswordView.as_view(),name="changepassword"),
     path('send-reset-password-mail/',SendPasswordResetView.as_view(),name="sendresetpasswordmail"),
     path('reset-password/<uid>/<token>/',UserPasswordResetView.as_view(),name="sendresetpasswordmail"),
@@ -26,9 +25,13 @@ urlpatterns = [
     path('airline-rud/<str:pk>',Airline_RUD.as_view(),name="airline-rud"),
     path('airline-list/',AirlineInfo.as_view(),name="airline-list"),
 
-    path('airline-main-create/',AirlineMain_create.as_view(),name="airline-main-create"),
-    path('airline-main-rud/<str:pk>',AirlineMain_RUD.as_view(),name="airline-main-rud"),
-    path('airline-main-list/',AirlineMainInfo.as_view(),name="airline-main-list")
+    path('airline-main-create/',Airline_create.as_view(),name="airline-main-create"),
+    path('airline-main-rud/<str:pk>',Airline_RUD.as_view(),name="airline-main-rud"),
+    path('airline-main-list/',AirlineInfo.as_view(),name="airline-main-list"),
+
+    path('flight-passenger-create/',Passenger_create.as_view(),name="flight-passenger-create"),
+    path('flight-passenger-rud/<str:pk>',PassengerRUD.as_view(),name="flight-passenger-rud"),
+    path('flight-passenger-list/',PassengerInfo.as_view(),name="flight-passenger-list")
 ]
 
 

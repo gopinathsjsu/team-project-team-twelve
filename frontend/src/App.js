@@ -1,13 +1,11 @@
-import "./Styles/app_landing.css"
+import * as React from 'react';
+import Button from '@mui/material/Button';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>
-          Airport Management System
-        </h1>
-      </header>
+  return (  
+    <div>
+      <Button variant="contained" color="success">Hello World!</Button>
     </div>
   );
 }

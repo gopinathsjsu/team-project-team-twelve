@@ -1,7 +1,5 @@
 ## Team-Twelve TEAM PROJECT
 
-## Airport-Management System
-
 # Team Members
 
 Swapnil Wagh
@@ -27,3 +25,29 @@ Zeel Satasiya
 
 - When working on a cooperative project, one of the most crucial things is to respect the opinions of your teammates.
 - We tried to put everyone's suggestions into practice while respecting each person's choice. When some ideas weren't acceptable, we had the guts to calmly explain why to them.
+
+# Tools and Technology Used
+
+Frontend : HTML5, CSS,Reactjs
+
+Backend : Python and Django
+
+Database : Postgresql (Amazon RDS and MySQL WorkBench)
+
+Deployment : Amazon EC2 Autoscaled cluster with Load balancing - [LINK](http://ec2-18-144-53-161.us-west-1.compute.amazonaws.com/)
+
+# Tasks
+
+Front End : Nandakishor S, Zeel Satasiya
+
+Back End : Swapnil Wagh, Pooja Patel
+
+Deployment : Swapnil Wagh,Pooja Patel
+
+DataBase : Pooja Patel,Swapnil Wagh,Nandakishor S,Zeel Satasiya
+
+# Scrum Meetings
+
+Monday 5pm-5:30pm
+
+# Architecture Diagram

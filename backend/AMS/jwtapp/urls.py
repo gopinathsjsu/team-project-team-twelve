@@ -1,6 +1,6 @@
 from django.urls import path,include
 
-from jwtapp.views import GetAllAirlineInfo, GetFlightSchedule, GetTerminalGateInfo, GetUserInfo, UserRegistrationView,UserLoginView,UserProfileView,UserChangePasswordView,SendPasswordResetView,UserPasswordResetView,Terminal_RUD,AllTerminalGatesInfo,FlightScehduleRUD,FlightScehduleInfo,Airline_create,AirlineInfo,Airline_RUD,Terminal_create,FlightSchedule_create, Airline_create, Airline_RUD, AirlineInfo, Passenger_create, PassengerRUD, PassengerInfo
+from jwtapp.views import GetAllAirlineInfo, GetFlightSchedule, GetTerminalGateInfo, GetUserInfo, UserRegistrationView,UserLoginView,UserChangePasswordView,SendPasswordResetView,UserPasswordResetView,Terminal_RUD,AllTerminalGatesInfo,FlightScehduleRUD,FlightScehduleInfo,Airline_create,AirlineInfo,Airline_RUD,Terminal_create,FlightSchedule_create, Airline_create, Airline_RUD, AirlineInfo, Passenger_create, PassengerRUD, PassengerInfo
 urlpatterns = [
     path('register/',UserRegistrationView.as_view(),name="register"),
     path('login/',UserLoginView.as_view(),name="login"),

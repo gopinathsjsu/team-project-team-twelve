@@ -134,7 +134,7 @@ class Mio_flight_schedule(models.Model):
     date=models.DateField(default=datetime.datetime.now().date())
     time =  models.TimeField(default=datetime.datetime.now().time())
     terminal_gate_key = models.ForeignKey(Mio_terminal, related_name = 'airport_terminal_gate', null = True, blank = True, on_delete =  models.CASCADE)
-    baggage_carousel = models.CharField(max_length = 100)
+    baggage_carousel = models.CharField(max_length = 100,null=True,blank=True)
     remarks = models.CharField(max_length = 100)
 
 

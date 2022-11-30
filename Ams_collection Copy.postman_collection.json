@@ -1,0 +1,467 @@
+{
+	"info": {
+		"_postman_id": "16c0677d-6c59-47ca-9e94-87e89be9b286",
+		"name": "Ams_collection Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"zeel@gmail.com\",\n  \"password\": \"root\",\n  \"roles\": \"airline_employee\",\n  \"first_name\": \"zeel\",\n  \"last_name\": \"zeel\",\n  \"password2\": \"root\",\n  \"email\": \"zeel11@gmail.com\",\n  \"terms_conditions\": \"True\",\n  \"airline_code\":\"BAW\"  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/register/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"zeel@gmail.com\",\n    \"password\":\"root\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/login/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_all_user_info",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5NDA5MjA2LCJpYXQiOjE2Njk0MDgwMDYsImp0aSI6IjYyYmQ4NjQxNGIyMDQ4OTQ4N2RlYTA1ODhjZmM4YjM1IiwidXNlcl9pZCI6NX0.kzEOK8uUCcVpCAmrXFGhxs73LTq1H-4efvGUZppAa5M",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"zeel@gmail.com\",\n  \"password\": \"root\",\n  \"roles\": \"airline_employee\",\n  \"first_name\": \"zeel\",\n  \"last_name\": \"zeel\",\n  \"password2\": \"root\",\n  \"email\": \"zeel@gmail.com\",\n  \"terms_conditions\": \"True\",\n  \"airline_code\":\"BAW\"  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/user-info/1",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"user-info",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "airline",
+			"item": [
+				{
+					"name": "airlines_list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}auth_urls/airline-list/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"airline-list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airline_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"airline_code\": \"BAW\",\n        \"airline_name\": \"British Airways\",\n        \"flight_code\": \"BA5212\",\n        \"is_available\": true\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/airline-create/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"airline-create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airline_rud",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airline_flight_key\": \"SIA_SQ3204\",\n    \"airline_code\": \"SIA\",\n    \"airline_name\": \"Singapore Airlines\",\n    \"flight_code\": \"SQ3204\",\n    \"is_available\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/airline-rud/AAL_AA2401",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"airline-rud",
+								"AAL_AA2401"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "terminal_gate",
+			"item": [
+				{
+					"name": "terminal_gate_rud",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}terminal-gate-rud/A1_G1/",
+							"host": [
+								"{{host}}terminal-gate-rud"
+							],
+							"path": [
+								"A1_G1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "terminal_gate_list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"terminal_gate\":\"K1\",\n    \"gate_status\":\"close\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/terminal-gate-list",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"terminal-gate-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "terminal_gate_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"terminal_gate\":\"p1\",\n    \"gate_status\":\"close\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/terminal-gate-create/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"terminal-gate-create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "flight_schedule",
+			"item": [
+				{
+					"name": "flight_schedule_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airline_flight_key\":\"AAL_AA2401\",\n    \"source\":\"amd\",\n    \"destination\":\"bom\",\n    \"arrival_departure\":\"arrival\",\n    \"time\":\"2022-01-02 12:00:00.000000\",\n    \"terminal_gate_key\":\"A1_G1\",\n    \"baggage_carousel\":\"B1\",\n    \"remarks\":\"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/flight-schedule-create/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"flight-schedule-create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flight_schedule_rud",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}flight-schedule-rud/AAL_AA2401_2022_11_28",
+							"host": [
+								"{{host}}flight-schedule-rud"
+							],
+							"path": [
+								"AAL_AA2401_2022_11_28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flight_schedule_list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Airline_flight_key\":\"SFO_313\",\n    \"source\":\"sfo\",\n    \"destination\":\"sjc\",\n    \"arrival_departure\":\"arrival\",\n    \"time\":\"04/12/2022,00:00:00\",\n    \"terminal_gate_key\":\"k1\",\n    \"baggage_carousel\":\"B1\",\n    \"remarks\":\"No\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/flight-schedule-list",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"flight-schedule-list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AirlineMain",
+			"item": [
+				{
+					"name": "airline_main_list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}auth_urls/airline-main-list/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"airline-main-list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airline_main_rud",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}auth_urls/airline-main-rud/SWA_WN5012",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"airline-main-rud",
+								"SWA_WN5012"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airline_main_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\r\n        \"airline_code\": \"SWA\",\r\n        \"airline_name\": \"American Airlines\",\r\n        \"flight_code\": \"WN50100\",\r\n        \"is_available\": true\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/airline-main-create/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"airline-main-create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "passenger",
+			"item": [
+				{
+					"name": "flight_passenger_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"flight_key\":\"AAL_AA2401_2022_01_02\",\n    \"passenger_id\": \"swaps\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}auth_urls/flight-passenger-create/",
+							"host": [
+								"{{host}}auth_urls"
+							],
+							"path": [
+								"flight-passenger-create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://127.0.0.1:8000/"
+		}
+	]
+}

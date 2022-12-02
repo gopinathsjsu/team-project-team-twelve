@@ -320,7 +320,7 @@ class FlightScehduleInfo(ListAPIView):
     # permission_classes = (IsAuthenticated)
     serializer_class = MioFlightScheduleSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = {'time':['gte','lte'],'date':['gte']}
+    filterset_fields = {'time':['gte','lte'],'date':['gte','lte']}
     search_fields = ['airline_flight_key','source','destination','arrival_departure','date','time','terminal_gate_key','baggage_carousel','remarks']
 
     def get_queryset(self, *args, **kwargs):

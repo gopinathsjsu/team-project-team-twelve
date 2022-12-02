@@ -5,11 +5,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
-from jwtapp.permissions import adminpermission
+from jwtapp.permissions import adminpermission,airline_employee_permission,airport_employee_permission
 from jwtapp.serializers import MioAirlineSerializer, MioFlightScheduleSerializer, MioTerminalSerializer, UserRegistrationSerializer, MioPassengerSerializer
 from jwtapp.serializers import UserLoginSerializer
 from jwtapp.renderers import UserRenderer
 from rest_framework.generics import ListAPIView
+from rest_framework.authentication import TokenAuthentication
+
+
 # Create your views here.
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -64,6 +67,7 @@ class UserLoginView(APIView):
             email=serializer.data.get('email')
             password=serializer.data.get('password')
             user=authenticate(email=email,password=password)
+            print(user)
             if user:
                 token=get_tokens_for_user(user) 
                 return Response({"token":token,"msg":"login successful","status":status.HTTP_200_OK})
@@ -108,6 +112,10 @@ class UserPasswordResetView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class GetUserInfo(APIView):
+    serializer_class = UserProfileSerializer
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['airline_code','roles']
+    search_fields = ['airline_code','roles']
     ordering_fields = ['id']
 
     def get(self, request,*args,**kwargs):
@@ -138,13 +146,13 @@ class GetAllAirlineInfo(APIView):
     serializer_class=MioAirlineSerializer
 
 
-class GetTerminalGateInfo(ListAPIView):
-    queryset=Mio_terminal.objects.all()
-    serializer_class=MioTerminalSerializer
+# class GetTerminalGateInfo(ListAPIView):
+#     queryset=Mio_terminal.objects.all()
+#     serializer_class=MioTerminalSerializer
 
-class GetFlightSchedule(ListAPIView):
-    queryset=Mio_flight_schedule.objects.all()
-    serializer_class=MioFlightScheduleSerializer
+# class GetFlightSchedule(ListAPIView):
+#     queryset=Mio_flight_schedule.objects.all()
+#     serializer_class=MioFlightScheduleSerializer
 
 
 class Airline_create(APIView):
@@ -185,27 +193,6 @@ class Airline_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,CreateMo
         return self.destroy(request, *args, **kwargs)
 
 
-class AirlineInfo(ListAPIView):
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAuthenticated, adminpermission,)
-    # queryset = Mio_terminal.objects.all()
-    serializer_class = MioAirlineSerializer
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['airline_code','flight_code','airline_name','is_available']
-    search_fields = ['airline_code','flight_code','airline_name','is_available']
-    # ordering_fields = ['id']
-    # pagination_class = MyPageNumberPagination
-
-    def get_queryset(self, *args, **kwargs):
-        """
-        TODO:
-        We can do customization in the queryset we want 
-        """
-        queryset_list=Mio_airline.objects.all()
-        return queryset_list
-
-
-
 class Terminal_create(APIView):
     serializer_class=MioTerminalSerializer
 
@@ -241,26 +228,6 @@ class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Generic
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
-
-class AllTerminalGatesInfo(ListAPIView):
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAuthenticated, adminpermission,)
-    # queryset = Mio_terminal.objects.all()
-    serializer_class = MioTerminalSerializer
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['gate_status','terminal_gate']
-    search_fields = ['terminal_gate','gate_status']
-    # ordering_fields = ['id']
-    # pagination_class = MyPageNumberPagination
-
-    def get_queryset(self, *args, **kwargs):
-        """
-        TODO:
-        We can do customization in the queryset we want 
-        """
-        queryset_list=Mio_terminal.objects.all()
-        return queryset_list
 
 
 class FlightSchedule_create(APIView):
@@ -309,17 +276,52 @@ class FlightScehduleRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Ge
         return self.destroy(request, *args, **kwargs)
 
 
+class AirlineInfo(ListAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,airline_employee_permission)
+    serializer_class = MioAirlineSerializer
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['airline_code','flight_code','airline_name','is_available']
+    search_fields = ['airline_code','flight_code','airline_name','is_available']
 
-class FlightScehduleInfo(ListAPIView):
+    def get_queryset(self, *args, **kwargs):
+        """
+        TODO:
+        We can do customization in the queryset we want 
+        """
+        user_airline_code=self.request.user.airline_code
+        queryset_list=Mio_airline.objects.filter(airline_code=user_airline_code)
+        return queryset_list
+
+
+
+class AllTerminalGatesInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated, adminpermission,)
     # queryset = Mio_terminal.objects.all()
+    serializer_class = MioTerminalSerializer
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['gate_status','terminal_gate']
+    search_fields = ['terminal_gate','gate_status']
+    # ordering_fields = ['id']
+    # pagination_class = MyPageNumberPagination
+
+    def get_queryset(self, *args, **kwargs):
+        """
+        TODO:
+        We can do customization in the queryset we want 
+        """
+        queryset_list=Mio_terminal.objects.all()
+        return queryset_list
+
+
+class FlightScehduleInfo(ListAPIView):
+    
+    # permission_classes = (IsAuthenticated)
     serializer_class = MioFlightScheduleSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['source','destination','arrival_departure','terminal_gate_key','baggage_carousel']
-    search_fields = ['source','destination','arrival_departure','terminal_gate_key','baggage_carousel']
-    ordering_fields = ['time']
-    # pagination_class = MyPageNumberPagination
+    filterset_fields = {'time':['gte','lte'],'date':['gte']}
+    search_fields = ['airline_flight_key','source','destination','arrival_departure','date','time','terminal_gate_key','baggage_carousel','remarks']
 
     def get_queryset(self, *args, **kwargs):
         """
@@ -328,9 +330,6 @@ class FlightScehduleInfo(ListAPIView):
         """
         queryset_list=Mio_flight_schedule.objects.all()
         return queryset_list
-
-
-
 
 class PassengerInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -376,16 +375,15 @@ class Passenger_create(APIView):
     
         data=request.data
         
-
         date = data.get('flight_key')[-10:]
         data["airline_flight_key"] = data.get('flight_key')[:-11]
 
         date = datetime.datetime.strptime(date, "%Y_%m_%d")
         data["date"] = date.date().strftime("%Y-%m-%d")
         
-        #import pdb ; pdb.set_trace()
         serializer=self.serializer_class(data=data)
-            # NOTEterminal_gate_key
+            # NOTE
+            # terminal_gate_key
         # "dont worry about the payload validations,it will automatically takes only those fields which we mentioned in serializer....other than that it will ignore gracefully "
         if serializer.is_valid():
             serializer.save()
@@ -395,4 +393,5 @@ class Passenger_create(APIView):
             return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
     # except Exception as e:
     #         return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+
 

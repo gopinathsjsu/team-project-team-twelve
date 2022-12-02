@@ -180,7 +180,7 @@ class MioTerminalSerializer(serializers.ModelSerializer):
 class MioFlightScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model=Mio_flight_schedule
-        fields=['fact_guid','airline_flight_key','source','destination','arrival_departure','date','time','terminal_gate_key','baggage_carousel','remarks']
+        fields=['fact_guid','airline_flight_key','source','destination','arrival_departure','date','time','terminal_gate_key','gate_close_time','gate_open_time','baggage_carousel','remarks']
     
     def to_representation(self, instance):
         return super().to_representation(instance)

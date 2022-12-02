@@ -11,7 +11,7 @@ from jwtapp.serializers import UserLoginSerializer
 from jwtapp.renderers import UserRenderer
 from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
-
+from rest_framework.renderers import JSONRenderer
 
 # Create your views here.
 
@@ -60,7 +60,7 @@ class UserRegistrationView(APIView):
 
 
 class UserLoginView(APIView):
-    renderer_classes=[UserRenderer]
+    # renderer_classes=[UserRenderer]
     def post(self, request,format=None):
         serializer=UserLoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -77,14 +77,14 @@ class UserLoginView(APIView):
         return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
 
 class UserProfileView(APIView):
-    renderer_classes=[UserRenderer]
+    # renderer_classes=[UserRenderer]
     permission_classes=[IsAuthenticated]
     def get(self, request,format=None):
         serializer=UserProfileSerializer(request.user)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 class UserChangePasswordView(APIView):
-    renderer_classes=[UserRenderer]
+    # renderer_classes=[UserRenderer]
     permission_classes=[IsAuthenticated]
     def post(self, request,format=None):
         #we are passing the data which is not available in serializer,so for that we need to use the context argument.
@@ -95,7 +95,7 @@ class UserChangePasswordView(APIView):
 
 
 class SendPasswordResetView(APIView):
-    renderer_classes=[UserRenderer]
+    # renderer_classes=[UserRenderer]
     def post(self,request,format=None):
         serializer=SendPasswordResetEmailSerializer(data=request.data)
         if serializer.is_valid():
@@ -104,7 +104,7 @@ class SendPasswordResetView(APIView):
 
 
 class UserPasswordResetView(APIView):
-    renderer_classes=[UserRenderer]
+    # renderer_classes=[UserRenderer]
     def post(self,request,uid,token,format=None):
         serializer=UserPasswordResetSerializer(data=request.data,context={"uid":uid, "token":token})
         if serializer.is_valid():
@@ -112,6 +112,7 @@ class UserPasswordResetView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class GetUserInfo(APIView):
+    renderer_classes=[JSONRenderer]
     serializer_class = UserProfileSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['airline_code','roles']
@@ -278,6 +279,7 @@ class FlightScehduleRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Ge
 
 class AirlineInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
+    renderer_classes=[JSONRenderer]
     permission_classes = (IsAuthenticated,airline_employee_permission)
     serializer_class = MioAirlineSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
@@ -299,6 +301,7 @@ class AllTerminalGatesInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated, adminpermission,)
     # queryset = Mio_terminal.objects.all()
+    renderer_classes=[JSONRenderer]
     serializer_class = MioTerminalSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['gate_status','terminal_gate']
@@ -318,6 +321,7 @@ class AllTerminalGatesInfo(ListAPIView):
 class FlightScehduleInfo(ListAPIView):
     
     # permission_classes = (IsAuthenticated)
+    renderer_classes=[JSONRenderer]
     serializer_class = MioFlightScheduleSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = {'time':['gte','lte'],'date':['gte','lte']}

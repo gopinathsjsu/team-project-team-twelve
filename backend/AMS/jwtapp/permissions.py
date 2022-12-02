@@ -13,6 +13,25 @@ class adminpermission(BasePermission):
             return False
 
 
+class airport_employee_permission(BasePermission):
+    def has_permission(self, request, view):
+        email = request.user.email
+        user_roles = User.objects.get(email=email).roles
+        if user_roles == 'airport_employee':
+            return True
+        else:
+            return False
+
+class airline_employee_permission(BasePermission):
+    def has_permission(self, request, view):
+        email = request.user.email
+        user_roles = User.objects.get(email=email).roles
+        if user_roles == 'airline_employee':
+            return True
+        else:
+            return False
+
+
 # class userpermissions(BasePermission):
 #     def has_permission(self, request, view):
 #         user = request.user

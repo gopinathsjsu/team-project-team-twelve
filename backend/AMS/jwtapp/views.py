@@ -217,6 +217,7 @@ class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Generic
 
     queryset=Mio_terminal.objects.all()
     serializer_class=MioTerminalSerializer
+    permission_classes=[IsAuthenticated,airport_employee_permission]
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -233,28 +234,31 @@ class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Generic
 
 class FlightSchedule_create(APIView):
     serializer_class=MioFlightScheduleSerializer
+    permission_classes=[IsAuthenticated,airline_employee_permission]
 
     def post(self, request,*args, **kwargs):
-    
-        data=request.data
-        dtm=datetime.datetime.strptime(data.get("time"),'%Y-%m-%d %H:%M:%S.%f')
-        data["date"]=dtm.date()
-        data["time"]=dtm.time()
-        date_dtm=dtm.date().strftime("%Y_%m_%d")
-        airline_flight_key=data.get('airline_flight_key')
-        fact_guid=f"{airline_flight_key}_{date_dtm}"
-        data["fact_guid"]=fact_guid
-        serializer=self.serializer_class(data=data)
-            # NOTEterminal_gate_key
-        # "dont worry about the payload validations,it will automatically takes only those fields which we mentioned in serializer....other than that it will ignore gracefully "
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"msg":"Terminal data added successful","status":status.HTTP_200_OK})
+        req_user_airline=str(User.objects.get(email=request.user.email).airline_code)
+        req_airline=request.data.get("airline_flight_key")[:3]
+        if req_user_airline==req_airline:
+            data=request.data
+            dtm=datetime.datetime.strptime(data.get("time"),'%Y-%m-%d %H:%M:%S.%f')
+            data["date"]=dtm.date()
+            data["time"]=dtm.time()
+            date_dtm=dtm.date().strftime("%Y_%m_%d")
+            airline_flight_key=data.get('airline_flight_key')
+            fact_guid=f"{airline_flight_key}_{date_dtm}"
+            data["fact_guid"]=fact_guid
+            serializer=self.serializer_class(data=data)
+                # NOTEterminal_gate_key
+            # "dont worry about the payload validations,it will automatically takes only those fields which we mentioned in serializer....other than that it will ignore gracefully "
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"msg":"Terminal data added successful","status":status.HTTP_200_OK})
+            else:
+                "to get this field is required error."
+                return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
         else:
-            "to get this field is required error."
-            return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
-    # except Exception as e:
-    #         return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+            return Response({"detail": "You do not have permission to perform this action.","status":status.HTTP_403_FORBIDDEN})
 
 
 
@@ -279,7 +283,7 @@ class FlightScehduleRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Ge
 
 class AirlineInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
-    renderer_classes=[JSONRenderer]
+    renderer_classes=[UserRenderer]
     permission_classes = (IsAuthenticated,airline_employee_permission)
     serializer_class = MioAirlineSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
@@ -301,7 +305,7 @@ class AllTerminalGatesInfo(ListAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated, adminpermission,)
     # queryset = Mio_terminal.objects.all()
-    renderer_classes=[JSONRenderer]
+    renderer_classes=[UserRenderer]
     serializer_class = MioTerminalSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['gate_status','terminal_gate']
@@ -321,7 +325,7 @@ class AllTerminalGatesInfo(ListAPIView):
 class FlightScehduleInfo(ListAPIView):
     
     # permission_classes = (IsAuthenticated)
-    renderer_classes=[JSONRenderer]
+    renderer_classes=[UserRenderer]
     serializer_class = MioFlightScheduleSerializer
     filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = {'time':['gte','lte'],'date':['gte','lte']}

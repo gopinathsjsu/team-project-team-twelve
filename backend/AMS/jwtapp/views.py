@@ -217,7 +217,7 @@ class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Generic
 
     queryset=Mio_terminal.objects.all()
     serializer_class=MioTerminalSerializer
-    permission_classes=[IsAuthenticated,airport_employee_permission]
+    permission_classes=[IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

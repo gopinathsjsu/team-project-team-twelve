@@ -54,16 +54,15 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'AMS.urls'
 
 TEMPLATES = [
@@ -194,8 +193,12 @@ EMAIL_HOST_USER=os.environ.get('EMAIL_FROM')
 
 PASSWORD_RESET_TIMEOUT =900   #time by which token will be valid in the email.After that it will be expired time in seconds.
 
-CORS_ALLOWED_ORIGINS = [
-    # frontend ka domain dena
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS=True
+
+# CORS_ALLOWED_ORIGINS = [
+#     # frontend ka domain dena
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+    
+# ]

@@ -1,7 +1,7 @@
 from email import utils
 from xml.dom import ValidationErr
 from rest_framework import serializers
-from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_airline_main, Mio_passenger
+from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_airline_main, Mio_passenger,BaggageCar
 from jwtapp.utils import Util
 
 # email reset
@@ -193,3 +193,14 @@ class MioPassengerSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         return super().to_representation(instance)
+
+
+class BaggageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BaggageCar
+        fields=['terminal_carousel',"hour_00","hour_01","hour_02","hour_03","hour_04","hour_05","hour_06","hour_07","hour_08","hour_09","hour_10","hour_11","hour_12","hour_13","hour_14","hour_15","hour_17","hour_18","hour_19","hour_20","hour_21","hour_22","hour_23"]
+
+    def to_representation(self, instance):
+        return super().to_representation(instance)
+
+

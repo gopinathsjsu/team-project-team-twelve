@@ -193,6 +193,6 @@ PASSWORD_RESET_TIMEOUT =900   #time by which token will be valid in the email.Af
 
 CORS_ALLOWED_ORIGINS = [
     # frontend ka domain dena
-    "http://localhost:3080",
+    "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]

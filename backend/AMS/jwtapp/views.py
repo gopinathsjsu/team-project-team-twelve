@@ -144,7 +144,7 @@ class GetUserInfo(APIView):
 
 class GetAllAirlineInfo(APIView):
     queryset=Mio_airline.objects.all()
-    serializer_class=MioAirlineSerializer
+    serializer_class=MioAirlineSerializer   
 
 
 # class GetTerminalGateInfo(ListAPIView):
@@ -217,7 +217,6 @@ class Terminal_RUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Generic
 
     queryset=Mio_terminal.objects.all()
     serializer_class=MioTerminalSerializer
-    permission_classes=[IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

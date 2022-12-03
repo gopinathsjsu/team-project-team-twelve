@@ -1,6 +1,6 @@
 from multiprocessing import context
 from django.shortcuts import render
-from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_passenger
+from jwtapp.models import Mio_airline, Mio_flight_schedule, Mio_terminal, User, Mio_passenger,BaggageCar
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -23,7 +23,7 @@ from rest_framework.permissions import IsAuthenticated
 from jwtapp.serializers import UserProfileSerializer
 from jwtapp.serializers import UserChangePasswordSerializer
 from jwtapp.serializers import SendPasswordResetEmailSerializer
-from jwtapp.serializers import UserPasswordResetSerializer
+from jwtapp.serializers import UserPasswordResetSerializer,BaggageSerializer
 from django.shortcuts import get_object_or_404
 
 from rest_framework.generics import GenericAPIView
@@ -401,4 +401,62 @@ class Passenger_create(APIView):
     # except Exception as e:
     #         return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
 
+
+class Baggagecreate(APIView):
+    serializer_class=BaggageSerializer
+
+    def post(self, request,*args, **kwargs):
+        data=request.data        
+        serializer=self.serializer_class(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"msg":"Baggage corosel data added successful","status":status.HTTP_200_OK})
+        else:
+            "to get this field is required error."
+            return Response({"msg":serializer.errors,"status":status.HTTP_400_BAD_REQUEST})
+   
+
+class BaggageRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,GenericAPIView):
+    queryset=BaggageCar.objects.all()
+    serializer_class=BaggageSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+class BaggageInfo(APIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated, adminpermission,)
+    # serializer_class = BaggageSerializer
+    # filter_backends = [DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter]
+    # filterset_fields = ['terminal_carousel',"hour_00","hour_01","hour_02","hour_03","hour_04","hour_05","hour_06","hour_07","hour_08","hour_09","hour_10","hour_11","hour_12","hour_13","hour_14","hour_15","hour_17","hour_18","hour_19","hour_20","hour_21","hour_22","hour_23"]
+    # search_fields = ['terminal_carousel',"hour_00","hour_01","hour_02","hour_03","hour_04","hour_05","hour_06","hour_07","hour_08","hour_09","hour_10","hour_11","hour_12","hour_13","hour_14","hour_15","hour_17","hour_18","hour_19","hour_20","hour_21","hour_22","hour_23"]
+    # ordering_fields =['terminal_carousel',"hour_00","hour_01","hour_02","hour_03","hour_04","hour_05","hour_06","hour_07","hour_08","hour_09","hour_10","hour_11","hour_12","hour_13","hour_14","hour_15","hour_17","hour_18","hour_19","hour_20","hour_21","hour_22","hour_23"]
+    # # pagination_class = MyPageNumberPagination
+
+    def get(self, request,format=None):
+        hour=request.data['hour']
+        queryset_list=BaggageCar.objects.values_list('terminal_carousel',hour)
+        dt=[{i[0]:i[1] for i in queryset_list}]
+        return Response({"data":dt,"status":status.HTTP_200_OK})
+
+
+class GateMaintance(UpdateModelMixin,GenericAPIView):
+    queryset=Mio_terminal.objects.all()
+    serializer_class=MioTerminalSerializer
+    permission_classes=[IsAuthenticated,airport_employee_permission]
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 

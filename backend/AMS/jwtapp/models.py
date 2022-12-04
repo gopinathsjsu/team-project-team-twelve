@@ -148,3 +148,32 @@ class Mio_passenger(models.Model):
     date=models.DateField(default=datetime.datetime.now().date())
     airline_flight_key=models.CharField(max_length= 100)
     passenger_id=models.CharField(max_length=50)
+
+
+
+class BaggageCar(models.Model):
+    terminal_carousel=models.CharField(max_length=100,primary_key=True)
+    hour_00=models.CharField(max_length=10,default="open")
+    hour_01=models.CharField(max_length=10,default="open")
+    hour_02=models.CharField(max_length=10,default="open")
+    hour_03=models.CharField(max_length=10,default="open")
+    hour_04=models.CharField(max_length=10,default="open")
+    hour_05=models.CharField(max_length=10,default="open")
+    hour_06=models.CharField(max_length=10,default="open")
+    hour_07=models.CharField(max_length=10,default="open")
+    hour_08=models.CharField(max_length=10,default="open")
+    hour_09=models.CharField(max_length=10,default="open")
+    hour_10=models.CharField(max_length=10,default="open")
+    hour_11=models.CharField(max_length=10,default="open")
+    hour_12=models.CharField(max_length=10,default="open")
+    hour_13=models.CharField(max_length=10,default="open")
+    hour_14=models.CharField(max_length=10,default="open")
+    hour_15=models.CharField(max_length=10,default="open")
+    hour_17=models.CharField(max_length=10,default="open")
+    hour_18=models.CharField(max_length=10,default="open")
+    hour_19=models.CharField(max_length=10,default="open")
+    hour_20=models.CharField(max_length=10,default="open")
+    hour_21=models.CharField(max_length=10,default="open")
+    hour_22=models.CharField(max_length=10,default="open")
+    hour_23=models.CharField(max_length=10,default="open")
+

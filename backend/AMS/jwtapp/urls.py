@@ -1,6 +1,7 @@
 from django.urls import path,include
 
-from jwtapp.views import GetUserInfo, UserRegistrationView,UserLoginView,UserChangePasswordView,SendPasswordResetView,UserPasswordResetView,Terminal_RUD,AllTerminalGatesInfo,FlightScehduleRUD,FlightScehduleInfo,Airline_create,AirlineInfo,Airline_RUD,Terminal_create,FlightSchedule_create, Airline_create, Airline_RUD, AirlineInfo, Passenger_create, PassengerRUD, PassengerInfo
+from jwtapp.views import GetUserInfo, UserRegistrationView,UserLoginView,UserChangePasswordView,SendPasswordResetView,UserPasswordResetView,Terminal_RUD,AllTerminalGatesInfo,FlightScehduleRUD,FlightScehduleInfo,Airline_create,AirlineInfo,Airline_RUD,Terminal_create,FlightSchedule_create, Airline_create, Airline_RUD, AirlineInfo, Passenger_create, PassengerRUD, PassengerInfo,Baggagecreate,BaggageRUD,BaggageInfo,GateMaintance
+
 urlpatterns = [
     path('register/',UserRegistrationView.as_view(),name="register"),
     path('login/',UserLoginView.as_view(),name="login"),
@@ -12,6 +13,8 @@ urlpatterns = [
     path('terminal-gate-create/',Terminal_create.as_view(),name="terminal-gate-create"),
     path('terminal-gate-rud/<str:pk>/',Terminal_RUD.as_view(),name="terminal-gate-rud"),
     path('terminal-gate-list/',AllTerminalGatesInfo.as_view(),name="terminal-gate-list"),
+    path('terminal-gate-maintain/<str:pk>/',GateMaintance.as_view(),name="terminal-gate-maintain"),
+
 
     path('flight-schedule-create/',FlightSchedule_create.as_view(),name="terminal-gate-create"),
     path('flight-schedule-rud/<str:pk>',FlightScehduleRUD.as_view(),name="flight-schedule-rud"),
@@ -27,7 +30,11 @@ urlpatterns = [
 
     path('flight-passenger-create/',Passenger_create.as_view(),name="flight-passenger-create"),
     path('flight-passenger-rud/<str:pk>',PassengerRUD.as_view(),name="flight-passenger-rud"),
-    path('flight-passenger-list/',PassengerInfo.as_view(),name="flight-passenger-list")
+    path('flight-passenger-list/',PassengerInfo.as_view(),name="flight-passenger-list"),
+
+    path('baggage-create/',Baggagecreate.as_view(),name="baggage-create"),
+    path('baggage-rud/<str:pk>',BaggageRUD.as_view(),name="baggage-rud"),
+    path('baggage-list/',BaggageInfo.as_view(),name="baggage-list")
 ]
 
 

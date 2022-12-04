@@ -68,6 +68,16 @@ Monday 5pm-5:30pm
 
 ![elb](https://user-images.githubusercontent.com/113156443/205470223-83c355ba-242d-466e-b99c-b9d75f44793b.png)
 
+# Diagram
+
+## Use Case Diagram
+
+![Use Case D](https://user-images.githubusercontent.com/113156443/205513808-4c95596a-c0ce-4076-8fcd-82342100ddf7.png)
+
+## Component Diagram
+
+![Component D](https://user-images.githubusercontent.com/113156443/205513815-7fc79c3c-c6cc-4f8e-91c5-1bf5d821bf79.png)
+
 # Documentation
 
 - [Project Task Board](https://github.com/orgs/gopinathsjsu/projects/30)

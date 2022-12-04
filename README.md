@@ -56,14 +56,22 @@ Monday 5pm-5:30pm
 
 # Deployemnt
 
-## EC2 instances
+## Auto Scaled EC 2 Instances
+
+![auto-scaling-instances](https://user-images.githubusercontent.com/113156443/205470236-97e9ce89-1985-4b29-9128-d14da10b57d8.png)
 
 ## AutoScaling group
 
 ![auto-scaling-group](https://user-images.githubusercontent.com/113156443/205470216-b1fd2407-032b-4e41-95aa-880ebe11d063.png)
 
-![auto-scaling-instances](https://user-images.githubusercontent.com/113156443/205470236-97e9ce89-1985-4b29-9128-d14da10b57d8.png)
-
 ## Load Balancer
 
 ![elb](https://user-images.githubusercontent.com/113156443/205470223-83c355ba-242d-466e-b99c-b9d75f44793b.png)
+
+# Documentation
+
+- [Project Task Board](https://github.com/orgs/gopinathsjsu/projects/30)
+
+- [Project Journal](https://docs.google.com/document/d/138cWbg1eq0DiD1NpS5xZX9konFcvmXGT/edit)
+
+- [Burndown Chart](https://docs.google.com/spreadsheets/d/1X_r9M7czpWGk0RfgXtODFL0MMmHSQw4m/edit#gid=243259179)

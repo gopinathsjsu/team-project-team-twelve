@@ -70,7 +70,7 @@ class UserLoginView(APIView):
             print(user)
             if user:
                 token=get_tokens_for_user(user) 
-                return Response({"token":token,"msg":"login successful","status":status.HTTP_200_OK})
+                return Response({"token":token,"msg":"login successful","user_role":user.roles,"status":status.HTTP_200_OK})
             else:
                 #serializer use nahi kar rahe isliye custom handle karna pad raha hai..warna as above handle ho jata
                 return Response({'errors':{'non_field_errors':["Email or password is not valid"]}},status.HTTP_404_NOT_FOUND)
@@ -272,7 +272,7 @@ class FlightScehduleRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,Ge
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
-
+    
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
@@ -417,8 +417,10 @@ class Baggagecreate(APIView):
    
 
 class BaggageRUD(RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin,GenericAPIView):
+
     queryset=BaggageCar.objects.all()
     serializer_class=BaggageSerializer
+    permission_classes=[IsAuthenticated,airport_employee_permission]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

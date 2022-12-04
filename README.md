@@ -85,3 +85,5 @@ Monday 5pm-5:30pm
 - [Project Journal](https://docs.google.com/document/d/138cWbg1eq0DiD1NpS5xZX9konFcvmXGT/edit)
 
 - [Burndown Chart](https://docs.google.com/spreadsheets/d/1X_r9M7czpWGk0RfgXtODFL0MMmHSQw4m/edit#gid=243259179)
+
+- [UI Wireframes](https://docs.google.com/presentation/d/1m27q8V0-PlDsUVXYABD4tR015FVIVTaNzTUxi4pQi48/edit#slide=id.g1a4d78267d5_0_12)

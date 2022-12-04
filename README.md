@@ -51,3 +51,5 @@ DataBase : Pooja Patel,Swapnil Wagh,Nandakishor S,Zeel Satasiya
 Monday 5pm-5:30pm
 
 # Architecture Diagram
+
+![architecture](https://user-images.githubusercontent.com/113156443/205470068-6b2add2f-8b8a-478d-93b9-1f5179b2d2dc.png)

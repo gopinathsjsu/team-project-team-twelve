@@ -53,3 +53,17 @@ Monday 5pm-5:30pm
 # Architecture Diagram
 
 ![architecture](https://user-images.githubusercontent.com/113156443/205470068-6b2add2f-8b8a-478d-93b9-1f5179b2d2dc.png)
+
+# Deployemnt
+
+# EC2 instances
+
+# AutoScaling group
+
+![auto-scaling-group](https://user-images.githubusercontent.com/113156443/205470216-b1fd2407-032b-4e41-95aa-880ebe11d063.png)
+
+![auto-scaling-instances](https://user-images.githubusercontent.com/113156443/205470236-97e9ce89-1985-4b29-9128-d14da10b57d8.png)
+
+# Load Balancer
+
+![elb](https://user-images.githubusercontent.com/113156443/205470223-83c355ba-242d-466e-b99c-b9d75f44793b.png)
